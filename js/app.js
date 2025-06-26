@@ -49,15 +49,18 @@ maximo.addEventListener('change', (e) => {
 });
 
 puertas.addEventListener('change', (e) => {
-    datosBusqueda.puertas = e.target.value;
+    datosBusqueda.puertas = parseInt(e.target.value);
+    filtrarAuto();
 });
 
 transmision.addEventListener('change', (e) => {
     datosBusqueda.transmision = e.target.value;
+    filtrarAuto();
 });
 
 color.addEventListener('change', (e) => {
     datosBusqueda.color = e.target.value;
+    filtrarAuto();
 });
 
 // Funciones
@@ -94,9 +97,21 @@ function llenarSelect() {
 
 // Funcion de filtar en base a la busqueda
 function filtrarAuto() {
-    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo).filter(filtarMaximo);
-    console.log(resultado);
-    mostrarAutos(resultado);
+    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo).filter(filtarMaximo).filter(filtrarPuerta).filter(filtarTransmision).filter(filtrarColor);
+
+    if (resultado.length) {
+        mostrarAutos(resultado);
+    } else {
+        noResultado();
+    }
+}
+
+function noResultado() {
+    limpiearHTML();
+    const noResultado = document.createElement('DIV');
+    noResultado.classList.add('alerta', 'error');
+    noResultado.textContent = 'No hay resultados, intenta con otros parametros de búsqueda';
+    resultado.appendChild(noResultado)
 }
 
 function filtrarMarca(auto) {
@@ -127,6 +142,30 @@ function filtarMaximo(auto) {
     const { maximo } = datosBusqueda
     if (maximo) {
         return auto.precio <= maximo;
+    }
+    return auto;
+}
+
+function filtrarPuerta(auto) {
+    const { puertas } = datosBusqueda
+    if (puertas) {
+        return auto.puertas === puertas;
+    }
+    return auto;
+}
+
+function filtarTransmision(auto) {
+    const { transmision } = datosBusqueda
+    if (transmision) {
+        return auto.transmision === transmision;
+    }
+    return auto;
+}
+
+function filtrarColor(auto) {
+    const { color } = datosBusqueda
+    if (color) {
+        return auto.color === color;
     }
     return auto;
 }
