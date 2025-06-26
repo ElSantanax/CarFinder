@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Escuchar por cambios
 marca.addEventListener('change', (e) => {
     datosBusqueda.marca = e.target.value;
+    filtrarAuto();
 });
 
 year.addEventListener('change', (e) => {
@@ -56,7 +57,6 @@ color.addEventListener('change', (e) => {
     datosBusqueda.color = e.target.value;
 });
 
-
 // Funciones
 function mostrarAutos() {
     autos.forEach(auto => {
@@ -78,4 +78,19 @@ function llenarSelect() {
         opcion.textContent = i;
         year.appendChild(opcion)
     }
+}
+
+// Funcion de filtar en base a la busqueda
+function filtrarAuto() {
+    const resultado = autos.filter(filtrarMarca);
+    console.log(resultado);
+}
+
+function filtrarMarca(auto) {
+
+    const { marca } = datosBusqueda
+    if (marca) {
+        return auto.marca === marca;
+    }
+    return auto;
 }
